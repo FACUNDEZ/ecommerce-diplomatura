@@ -17,3 +17,10 @@ model Productos {
   quantity Int
   category String
 }
+
+model Usuarios {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  password String
+}
