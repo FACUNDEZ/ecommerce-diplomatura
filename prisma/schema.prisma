@@ -10,10 +10,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Productos {
+model Usuarios {
   id String @id @default(uuid())
-  product String
-  price Int
-  quantity Int
-  category String
+  name String
+  email String @unique
+  password String
 }
