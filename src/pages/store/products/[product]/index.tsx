@@ -1,8 +1,11 @@
 import Image from "next/image"
+import { useRouter } from "next/router"
 
 function index({ producto }: { producto: any }) {
+    const router = useRouter()
     return (
         <>
+        <button onClick={() => router.push("/store")}>Volver</button>
             <Image width={400} height={400} src={producto.image} alt="image-product"></Image>
             <p>{producto.price}</p>
             <div className="flex">
@@ -21,8 +24,6 @@ export async function getServerSideProps(context: any) {
     try {
         const res = await fetch("https://fakestoreapi.com/products")
         const datos = await res.json()
-
-        console.log(datos[0].rating)
 
         const productoABuscar = context.params.product
         const producto = datos.find((product: any) => product.title === productoABuscar)

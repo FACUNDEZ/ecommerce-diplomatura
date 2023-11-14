@@ -1,3 +1,4 @@
+import { product } from '@/types/components.types';
 import React, { useState, useEffect } from 'react';
 
 function Promo() {
@@ -17,7 +18,9 @@ function Promo() {
         }
     };
 
-    getApi();
+    if (products.length === 0) {
+        getApi();
+    }
 
     return (
         <>
@@ -43,12 +46,11 @@ function Promo() {
 
                         <div className="lg:col-span-2 lg:py-8">
                             <ul className="grid grid-cols-2 gap-4">
-                                {products.map((product: any, index) => (
+                                {products.map((product: product, index) => (
                                     <li key={index}>
                                         <a href="#" className="block group">
                                             <img
                                                 src={product.image}
-                                                alt={product.title}
                                                 className="object-cover w-full rounded aspect-square"
                                             />
                                             <div className="mt-3">
