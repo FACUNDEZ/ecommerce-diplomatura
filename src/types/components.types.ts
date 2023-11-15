@@ -20,7 +20,8 @@ export type emailResponse =
 export type product = 
 | {
     title: String;
-    price: Number;
+    price: string;
     description: String;
     image: string;
+    category: string;
 }

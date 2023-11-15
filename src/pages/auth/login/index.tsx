@@ -1,11 +1,14 @@
-import { useRef, FormEvent } from "react"
+import { useRef, FormEvent, useContext } from "react"
 import { useRouter } from "next/navigation"
+import { UserContext } from "@/context/UserContext"
 
 function index() {
     const router = useRouter()
 
     const emailRef = useRef("")
     const passwordRef = useRef("")
+
+    const { user, setUser }: any = useContext(UserContext)
 
     const getApi = async () => {
         try {
@@ -20,8 +23,9 @@ function index() {
             })
             const data = await response.json()
 
-            if (response.status === 200) {
+            if (response.status === 200 && data.authorized) {
                 alert(data.msg)
+                router.push("/")
             } else {
                 alert(data.msg)
                 return
@@ -40,6 +44,9 @@ function index() {
             return
         }
 
+        //@ts-ignore
+        setUser({ email: emailRef.current?.value })
+
         await getApi()
     }
 
@@ -49,7 +56,6 @@ function index() {
             <div className="mx-auto max-w-screen-xl py-48 px-4 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-lg text-center">
                     <h1 className="text-3xl font-bold sm:text-3xl">Iniciar Sesión</h1>
-
                 </div>
 
                 <form onSubmit={enviarFormulario} className="mx-auto mb-0 mt-8 max-w-md space-y-4">
