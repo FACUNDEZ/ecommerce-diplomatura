@@ -1,5 +1,6 @@
-import { FormEvent, useRef } from "react"
+import { FormEvent, useRef, useContext } from "react"
 import { useRouter } from "next/navigation"
+import { UserContext } from "@/context/UserContext"
 
 function index() {
     const router = useRouter()
@@ -7,6 +8,8 @@ function index() {
     const nameRef = useRef(null)
     const emailRef = useRef(null)
     const passwordRef = useRef(null)
+
+    const { user, setUser }: any = useContext(UserContext)
 
     const getApi = async () => {
         try {
@@ -23,6 +26,7 @@ function index() {
 
             if (response.status === 200) {
                 alert(data.msg)
+                router.push("/")
             } else {
                 alert(data.msg)
             }
@@ -39,6 +43,9 @@ function index() {
             alert("Completa los datos, por favor")
             return
         }
+
+        //@ts-ignore
+        setUser({ email: emailRef.current?.value })
 
         await getApi()
     }

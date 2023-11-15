@@ -23,4 +23,5 @@ export type product =
     price: string;
     description: String;
     image: string;
+    category: string;
 }

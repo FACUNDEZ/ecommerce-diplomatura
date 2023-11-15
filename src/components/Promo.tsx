@@ -1,8 +1,65 @@
 import { product } from '@/types/components.types';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent, useRef } from 'react';
+import { useRouter } from 'next/router';
+import { io } from 'socket.io-client';
+
+let socket: any
+
+type Mensaje = {
+    username: string;
+    contenido: string;
+}
 
 function Promo() {
+    const router = useRouter()
     const [products, setProducts] = useState([]);
+
+    const [message, setMessage] = useState("");
+    const [username, setUserName] = useState("")
+    const [todosLosMensajes, setTodosLosMensajes] = useState([]);
+
+    const [chat, setChat] = useState(false)
+
+    const toggleChat = () => {
+        setChat(true)
+    }
+
+    useEffect(() => {
+        iniciarSockets();
+
+        return () => {
+            socket.disconnect();
+        };
+    }, []);
+
+    function iniciarSockets() {
+        fetch("/api/socket");
+
+        socket = io();
+
+        socket.on("chat:mensaje", (mensajeNuevo: string) => {
+            //@ts-ignore
+            setTodosLosMensajes((mensajesAnteriores) => [
+                ...mensajesAnteriores,
+                mensajeNuevo,
+            ]);
+        });
+    }
+
+    function manejarEnvioDeMensaje(evento: FormEvent) {
+        evento.preventDefault();
+
+        console.log("Mensaje enviado!");
+
+        if (message === "") {
+            alert('escribe algo')
+            return
+        }
+
+        socket.emit("chat:mensaje", { username, contenido: message });
+
+        setMessage("");
+    }
 
     const getApi = async () => {
         try {
@@ -10,7 +67,7 @@ function Promo() {
             const response = await fetch(api);
             const data = await response.json();
 
-            
+
             const firstTwoProducts = data.filter((product: any, index: any) => index < 2)
             setProducts(firstTwoProducts);
         } catch (error) {
@@ -24,7 +81,7 @@ function Promo() {
 
     return (
         <>
-            <section>
+            <section className='relative'>
                 <div className="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:items-stretch">
                         <div className="grid p-6 bg-gray-100 rounded place-content-center sm:p-8">
@@ -35,12 +92,12 @@ function Promo() {
                                         Aprovecha estas ofertas especiales y llevate dos productos a un precio!
                                     </p>
                                 </header>
-                                <a
-                                    href="#"
+                                <button
+                                    onClick={() => router.push("/store")}
                                     className="inline-block px-12 py-3 mt-8 text-sm font-medium text-white transition bg-gray-900 border border-gray-900 rounded hover:shadow focus:outline-none focus:ring"
                                 >
                                     Comprar
-                                </a>
+                                </button>
                             </div>
                         </div>
 
@@ -48,7 +105,7 @@ function Promo() {
                             <ul className="grid grid-cols-2 gap-4">
                                 {products.map((product: product, index) => (
                                     <li key={index}>
-                                        <a href="#" className="block group">
+                                        <a href={`/store/products/${product.title}`} className="block group">
                                             <img
                                                 src={product.image}
                                                 className="object-cover w-full rounded aspect-square"
@@ -66,6 +123,35 @@ function Promo() {
                         </div>
                     </div>
                 </div>
+                <button onClick={toggleChat} className='rounded bg-black text-white p-3 fixed right-10 bottom-10'>Abrir Chat</button>
+                {chat && (
+                    <div className="fixed bottom-0 right-0 mb-10 mr-10 bg-white p-4 border rounded w-96 h-96 flex flex-col">
+                        <button onClick={() => setChat(false)} className='text-right'>Cerrar</button>
+                        <section className="chat-container flex-1 overflow-y-auto">
+                            <article className="chat-window">
+                                <div id="output">
+                                    <ul className="text-black">
+                                        {todosLosMensajes.map((mensaje: Mensaje, index) => (
+                                            <li key={index}>
+                                                <span>
+                                                    {mensaje.username}: {mensaje.contenido}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </article>
+                        </section>
+
+                        <div className="flex mt-2">
+                            <form onSubmit={manejarEnvioDeMensaje}>
+                                <input onChange={(evento) => setUserName(evento.target.value)} type="text" placeholder="Nombre" className="mr-2 p-2 border rounded" />
+                                <input onChange={(evento) => setMessage(evento.target.value)} type="text" placeholder="Mensaje" className="mr-2 p-2 border rounded" />
+                                <input type='submit' value="Enviar" className="bg-black text-white px-4 py-2 rounded cursor-pointer" />
+                            </form>
+                        </div>
+                    </div>
+                )}
             </section>
         </>
     );
