@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { CartContext } from '@/context/CartContext';
 import { UserContext } from '@/context/UserContext';
+import Image from 'next/image';
 
 {/**Fran  */ }
 type Product = {
@@ -70,7 +71,7 @@ function Index() {
                             <p>Categoría: {product.category}</p>
                             <p>Precio: ${product.price}</p>
                             <p>{product.description}</p>
-                            <img src={product.image} alt={product.title} width="200" />
+                            <Image src={product.image} alt={product.title} width="200" />
                         </li>
                     ))}
                 </ul>
@@ -81,9 +82,10 @@ function Index() {
                 {products.map((product: Product, index) => (
                     <li key={index}>
                         <a href={`/store/products/${product.title}`} className="block group">
-                            <img
+                            <Image
                                 src={product.image}
                                 className="w-20 h-20"
+                                alt="product"
                             />
                             <div className="mt-3">
                                 <h3 className="font-medium text-gray-900 group-hover:underline group-hover:underline-offset-4">

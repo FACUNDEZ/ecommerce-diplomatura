@@ -5,7 +5,7 @@ import type {
     PreferenceBackUrl,
 } from "mercadopago/models/preferences/create-payload.model";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getCartAndUser } from "@/utils/getCartAndUser";
+import { GetCartAndUser } from "@/utils/getCartAndUser";
 
 export default function paymentMercadoPagoHandler(
     req: NextApiRequest,
@@ -13,7 +13,7 @@ export default function paymentMercadoPagoHandler(
 ) {
     console.log("Se empezo el proceso");
 
-    const { cart, user }: any = getCartAndUser()();
+    const { cart, user }: any = GetCartAndUser()();
 
     const mercadopago = new MercadoPagoConfig({
         accessToken: process.env.MP_ACCESS_TOKEN as string,

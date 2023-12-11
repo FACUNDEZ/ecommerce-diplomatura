@@ -2,6 +2,7 @@ import { product } from '@/types/components.types';
 import { useState, useEffect, FormEvent, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { io } from 'socket.io-client';
+import Image from 'next/image';
 
 let socket: any
 
@@ -106,9 +107,10 @@ function Promo() {
                                 {products.map((product: product, index) => (
                                     <li key={index}>
                                         <a href={`/store/products/${product.title}`} className="block group">
-                                            <img
+                                            <Image
                                                 src={product.image}
                                                 className="object-cover w-full rounded aspect-square"
+                                                alt='product'
                                             />
                                             <div className="mt-3">
                                                 <h3 className="font-medium text-gray-900 group-hover:underline group-hover:underline-offset-4">
