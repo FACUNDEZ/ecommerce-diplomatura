@@ -2,7 +2,7 @@ import { FormEvent, useRef, useContext } from "react"
 import { useRouter } from "next/navigation"
 import { UserContext } from "@/context/UserContext"
 
-function index() {
+function Index() {
     const router = useRouter()
 
     const nameRef = useRef(null)
@@ -122,4 +122,4 @@ function index() {
     )
 }
 
-export default index
+export default Index

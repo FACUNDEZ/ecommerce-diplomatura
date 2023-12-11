@@ -1,12 +1,13 @@
+"use client"
 import { useRef, FormEvent, useContext } from "react"
 import { useRouter } from "next/navigation"
 import { UserContext } from "@/context/UserContext"
 
-function index() {
+function Index() {
     const router = useRouter()
 
-    const emailRef = useRef("")
-    const passwordRef = useRef("")
+    const emailRef = useRef(null)
+    const passwordRef = useRef(null)
 
     const { user, setUser }: any = useContext(UserContext)
 
@@ -146,4 +147,4 @@ function index() {
     )
 }
 
-export default index
+export default Index

@@ -1,10 +1,11 @@
+"use client"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import { CartContext } from '@/context/CartContext';
 import { UserContext } from "@/context/UserContext";
 import { useContext } from "react";
 
-function index({ producto, rating }: { producto: any, rating: any }) {
+function Index({ producto, rating }: { producto: any, rating: any }) {
     const router = useRouter()
     const { cart, setCart }: any = useContext(CartContext)
     const { user }: any = useContext(UserContext)
@@ -77,4 +78,4 @@ export async function getServerSideProps(context: any) {
     }
 }
 
-export default index
+export default Index

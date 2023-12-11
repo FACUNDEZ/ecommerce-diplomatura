@@ -1,10 +1,12 @@
+"use client"
 import { useContext } from "react"
 import { CartContext } from '@/context/CartContext';
 import { product } from "@/types/components.types";
 import { useRouter } from "next/router";
 import { UserContext } from "@/context/UserContext";
+import Image from "next/image";
 
-function index() {
+function Index() {
     const router = useRouter()
     const { cart }: any = useContext(CartContext)
     const { user }: any = useContext(UserContext)
@@ -47,7 +49,7 @@ function index() {
                         <ul className="space-y-4">
                             {cart.products.map((product: product, index: number) => (
                                 <li className="flex items-center gap-4" key={index}>
-                                    <img
+                                    <Image
                                         src={product.image}
                                         alt="image-product"
                                         className="h-16 w-16 rounded object-cover"
@@ -88,4 +90,4 @@ function index() {
 }
 
 
-export default index
+export default Index
