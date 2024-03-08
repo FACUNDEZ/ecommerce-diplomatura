@@ -13,7 +13,7 @@ function Index() {
 
     const getApi = async () => {
         try {
-            const api = "https://ecommerce-diplomatura-mobile.vercel.app/api/usuarios/register"
+            const api = "http://localhost:3000/api/usuarios/register"
             const response = await fetch(api, {
                 method: 'POST',
                 headers: {
